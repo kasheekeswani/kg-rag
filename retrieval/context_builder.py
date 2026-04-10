@@ -3,7 +3,12 @@ def build_context(results):
         return "No relevant information found."
 
     sentences = []
-    for u, r, v in results:
-        sentences.append(f"{u} {r} {v}")
+    seen = set()
 
-    return ". ".join(sentences)
+    for u, r, v in results:
+        sentence = f"{u} {r} {v}"
+        if sentence not in seen:
+            seen.add(sentence)
+            sentences.append(sentence)
+
+    return ". ".join(sentences[:8])  # limit size
