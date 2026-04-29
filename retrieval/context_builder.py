@@ -2,21 +2,24 @@ def build_context(results):
     if not results:
         return "No relevant information found."
 
-    known_for = []
-    works_in = []
+    context_lines = []
 
     for u, r, v in results:
-        if r == "known_for":
-            known_for.append(v)
-        elif r == "works_in":
-            works_in.append(v)
 
-    context = ""
+        if r == "is_a":
+            context_lines.append(f"{u} is a {v}.")
 
-    if known_for:
-        context += f"{u} is known for: {', '.join(known_for)}. "
+        elif r == "has_synonym":
+            context_lines.append(f"{u} is also known as {v}.")
 
-    if works_in:
-        context += f"{u} worked in: {', '.join(works_in)}."
+        elif r == "has_iupac_name":
+            context_lines.append(f"The IUPAC name of {u} is {v}.")
 
-    return context
+        elif r == "has_molecular_weight":
+            context_lines.append(f"{u} has a molecular weight of {v}.")
+
+        else:
+            # fallback (important)
+            context_lines.append(f"{u} {r} {v}.")
+
+    return "\n".join(context_lines)

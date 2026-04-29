@@ -4,7 +4,8 @@ from retrieval.query_graph import query_graph
 from retrieval.context_builder import build_context
 from llm.generate import generate_answer
 
-DATA_PATH = "data/triples.json"
+# 👉 SWITCH TO PUBCHEM GRAPH
+DATA_PATH = "data/triples1.json"
 
 
 def main():
@@ -18,23 +19,28 @@ def main():
         if query.lower() == "exit":
             break
 
-        # 1. extract entities
+        # 1. Extract entities
         entities = extract_entities(query)
+        print(f"\n🧩 Entities: {entities}")  # helpful debug
 
-        # 2. retrieve
+        # 2. Retrieve from graph
         results = []
         for ent in entities:
             results.extend(query_graph(G, ent, query))
 
         results = results[:10]
 
-        # 3. build context
+        if not results:
+            print("\n⚠️ No results found in graph")
+            continue
+
+        # 3. Build context
         context = build_context(results)
 
         print("\n🔎 Context:")
         print(context)
 
-        # 4. generate answer
+        # 4. Generate answer
         answer = generate_answer(context, query)
 
         print("\n🤖 Answer:")
