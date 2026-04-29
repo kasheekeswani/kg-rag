@@ -24,7 +24,7 @@ def main():
         # 2. retrieve
         results = []
         for ent in entities:
-            results.extend(query_graph(G, ent))
+            results.extend(query_graph(G, ent, query))
 
         results = results[:10]
 
